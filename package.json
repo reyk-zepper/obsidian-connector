@@ -1,0 +1,29 @@
+{
+  "name": "obsidian-connector",
+  "version": "0.1.0",
+  "description": "MCP server to connect Claude with Obsidian vaults",
+  "main": "dist/index.js",
+  "bin": {
+    "obsidian-connector": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepare": "npm run build"
+  },
+  "keywords": ["mcp", "obsidian", "claude", "notes"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "chokidar": "^4.0.1",
+    "gray-matter": "^4.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  },
+  "files": [
+    "dist"
+  ]
+}
