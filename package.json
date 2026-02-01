@@ -2,6 +2,7 @@
   "name": "obsidian-connector",
   "version": "0.1.0",
   "description": "MCP server to connect Claude with Obsidian vaults",
+  "type": "module",
   "main": "dist/index.js",
   "bin": {
     "obsidian-connector": "./dist/index.js"
@@ -12,8 +13,15 @@
     "prepare": "npm run build"
   },
   "keywords": ["mcp", "obsidian", "claude", "notes"],
-  "author": "",
+  "author": "Reyk Zepper",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reyk-zepper/obsidian-connector"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
     "chokidar": "^4.0.1",

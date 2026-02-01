@@ -1,0 +1,2 @@
+# NOTE: src/index.ts will need #!/usr/bin/env node shebang at the top
+# This is required for the CLI binary to execute properly
