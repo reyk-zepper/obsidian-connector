@@ -37,9 +37,12 @@ export function updateWikilinks(
   const newLink = newPath.replace(/\.md$/, '');
 
   // Update [[oldPath]], [[oldPath|alias]], [[oldPath#heading]], and [[oldPath#^block]] formats
-  const regex = new RegExp(`\\[\\[${escapeRegex(oldLink)}(#[^\\]|]+)?(\\|[^\\]]+)?\\]\\]`, 'g');
-  return content.replace(regex, (match, headingOrBlock, alias) => {
-    return `[[${newLink}${headingOrBlock || ''}${alias || ''}]]`;
+  // Use lookahead to prevent partial path matching (e.g., "note" shouldn't match "note-draft")
+  const regex = new RegExp(`\\[\\[${escapeRegex(oldLink)}(?=(#[^\\]\\|]+)?(\\|[^\\]]+)?\\]\\])`, 'g');
+  return content.replace(regex, (match) => {
+    // Extract the parts after the link (heading/block and alias)
+    const afterLink = match.slice(2 + oldLink.length, -2); // Remove [[ and ]]
+    return `[[${newLink}${afterLink}]]`;
   });
 }
 
