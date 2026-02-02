@@ -23,7 +23,7 @@ export class Vault {
 
     const metadata: NoteMetadata = {
       path: notePath,
-      title: frontmatter.title || path.basename(notePath, '.md'),
+      title: typeof frontmatter.title === 'string' ? frontmatter.title : path.basename(notePath, '.md'),
       tags,
       frontmatter,
       outgoingLinks,

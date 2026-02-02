@@ -1,6 +1,6 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import chokidar from 'chokidar';
+import * as chokidar from 'chokidar';
 import { NoteMetadata, VaultStructure } from './types.js';
 import { Vault } from './vault.js';
 
@@ -87,9 +87,9 @@ export class Indexer {
       ignored: /(^|[\/\\])\../, // Ignore dotfiles
     });
 
-    this.watcher.on('add', (path) => this.indexFile(path));
-    this.watcher.on('change', (path) => this.indexFile(path));
-    this.watcher.on('unlink', (path) => {
+    this.watcher.on('add', (path: string) => this.indexFile(path));
+    this.watcher.on('change', (path: string) => this.indexFile(path));
+    this.watcher.on('unlink', (path: string) => {
       this.index.delete(path);
       this.buildBacklinks();
     });
