@@ -100,14 +100,14 @@ export function createReadTools(vault: Vault, indexer: Indexer) {
       // Filter by date
       if (args.modified_after) {
         const date = new Date(args.modified_after);
-        notes = notes.filter(n => n.modifiedAt > date);
+        notes = notes.filter(n => new Date(n.modifiedAt) > date);
       }
 
       // Sort
       if (args.sort_by === 'modified') {
-        notes.sort((a, b) => b.modifiedAt.getTime() - a.modifiedAt.getTime());
+        notes.sort((a, b) => new Date(b.modifiedAt).getTime() - new Date(a.modifiedAt).getTime());
       } else if (args.sort_by === 'created') {
-        notes.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+        notes.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       } else if (args.sort_by === 'title') {
         notes.sort((a, b) => a.title.localeCompare(b.title));
       }
