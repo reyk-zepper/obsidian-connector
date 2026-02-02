@@ -6,11 +6,11 @@ export interface NoteMetadata {
   path: string;
   title: string;
   tags: string[];
-  frontmatter: Record<string, any>;
+  frontmatter: Record<string, unknown>;
   outgoingLinks: string[];
   headings: string[];
-  modifiedAt: Date;
-  createdAt: Date;
+  modifiedAt: string;
+  createdAt: string;
 }
 
 export interface SearchResult {
@@ -22,7 +22,7 @@ export interface SearchResult {
 
 export interface VaultStructure {
   folders: string[];
-  tags: Map<string, number>;
+  tags: Record<string, number>;
   topLinks: Array<{ target: string; count: number }>;
   stats: {
     totalNotes: number;
