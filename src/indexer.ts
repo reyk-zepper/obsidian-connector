@@ -139,7 +139,7 @@ export class Indexer {
 
     return {
       folders: Array.from(folders).sort(),
-      tags: tagCounts,
+      tags: Object.fromEntries(tagCounts),
       topLinks,
       stats: {
         totalNotes: this.index.size,
