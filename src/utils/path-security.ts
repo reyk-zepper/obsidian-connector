@@ -2,13 +2,13 @@ import * as path from 'path';
 import * as fs from 'fs/promises';
 
 export function validatePath(vaultPath: string, notePath: string): string {
+  // Input validation
+  if (!vaultPath || !notePath) {
+    throw new Error('vaultPath and notePath are required');
+  }
+
   // Normalize and resolve the path
   const normalized = path.normalize(notePath);
-
-  // Reject path traversal attempts
-  if (normalized.includes('..')) {
-    throw new Error('Path traversal not allowed');
-  }
 
   // Ensure path is relative
   if (path.isAbsolute(normalized)) {
@@ -22,7 +22,8 @@ export function validatePath(vaultPath: string, notePath: string): string {
   const vaultPathResolved = path.resolve(vaultPath);
   const fullPathResolved = path.resolve(fullPath);
 
-  if (!fullPathResolved.startsWith(vaultPathResolved)) {
+  if (!fullPathResolved.startsWith(vaultPathResolved + path.sep) &&
+      fullPathResolved !== vaultPathResolved) {
     throw new Error('Path must be within vault directory');
   }
 
@@ -30,11 +31,17 @@ export function validatePath(vaultPath: string, notePath: string): string {
 }
 
 export async function ensureDirectory(dirPath: string): Promise<void> {
+  if (!dirPath) {
+    throw new Error('dirPath is required');
+  }
   await fs.mkdir(dirPath, { recursive: true });
 }
 
 export function ensureMarkdownExtension(filePath: string): string {
-  if (!filePath.endsWith('.md')) {
+  if (!filePath) {
+    return '.md';
+  }
+  if (!filePath.toLowerCase().endsWith('.md')) {
     return `${filePath}.md`;
   }
   return filePath;
