@@ -28,8 +28,8 @@ export class Vault {
       frontmatter,
       outgoingLinks,
       headings,
-      modifiedAt: stats.mtime,
-      createdAt: stats.birthtime,
+      modifiedAt: stats.mtime.toISOString(),
+      createdAt: stats.birthtime.toISOString(),
     };
 
     return { content, metadata };
@@ -38,19 +38,19 @@ export class Vault {
   async createNote(notePath: string, content: string): Promise<void> {
     const fullPath = validatePath(this.config.path, ensureMarkdownExtension(notePath));
 
-    // Check if file exists
-    try {
-      await fs.access(fullPath);
-      throw new Error(`Note already exists: ${notePath}`);
-    } catch (err: any) {
-      if (err.code !== 'ENOENT') throw err;
-    }
-
     // Ensure directory exists
     const dir = path.dirname(fullPath);
     await ensureDirectory(dir);
 
-    await fs.writeFile(fullPath, content, 'utf-8');
+    // Use exclusive write flag to prevent race conditions
+    try {
+      await fs.writeFile(fullPath, content, { encoding: 'utf-8', flag: 'wx' });
+    } catch (err: any) {
+      if (err.code === 'EEXIST') {
+        throw new Error(`Note already exists: ${notePath}`);
+      }
+      throw err;
+    }
   }
 
   async editNote(notePath: string, content: string): Promise<void> {
@@ -70,7 +70,8 @@ export class Vault {
 
     const fileName = path.basename(fullPath);
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const trashPath = path.join(trashDir, `${timestamp}-${fileName}`);
+    const uniqueId = Math.random().toString(36).substring(2, 8);
+    const trashPath = path.join(trashDir, `${timestamp}-${uniqueId}-${fileName}`);
 
     await fs.rename(fullPath, trashPath);
   }
